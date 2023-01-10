@@ -6,9 +6,11 @@ const App = () => {
   const [weather, setWeather] = useState("");
   const [error, setError] = useState(false);
   const [city, setCity] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchData = (city) => {
     setError(false);
+    setLoading(true);
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=6ecf2fe9632179c173dbff234cc83200`;
     axios
       .get(url)
@@ -20,6 +22,7 @@ const App = () => {
         setWeather("");
         setError(true);
       });
+    setLoading(false);
   };
 
   const onKeyPress = (e) => {
@@ -28,12 +31,14 @@ const App = () => {
       return fetchData(e.target.value);
     }
   };
+
   return (
     <div className={styles.app}>
       <div className={styles.input_div}>
         <input type="text" name="weather" onKeyDown={onKeyPress} />
         <h3>{weather.name}</h3>
       </div>
+      {loading && <div className={styles["loading-spinner"]}></div>}
       {error && city.length > 0 && (
         <h3 className={styles.error}>Cant find {city} in the database</h3>
       )}
