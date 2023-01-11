@@ -1,52 +1,12 @@
-import axios from "axios";
 import { useState } from "react";
 import styles from "./App.module.scss";
+import useFetch from "./hooks/useFetch";
 
 const App = () => {
-  const [weather, setWeather] = useState("");
-  const [error, setError] = useState(false);
   const [city, setCity] = useState("");
-  const [cities, setCities] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  axios
-    .get(
-      `http://api.openweathermap.org/data/2.5/weather?q=Larnaca&Municipality&appid=6ecf2fe9632179c173dbff234cc83200`
-    )
-    .then((res) => {
-      console.log(res.data);
-    });
-
-  // FETCHING START
-  const fetchData = (city) => {
-    setError(false);
-    setLoading(true);
-    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=6ecf2fe9632179c173dbff234cc83200`;
-    axios.get(url).then((res) => {
-      if (res.data.length === 0) {
-        setError(true);
-        setCities([]);
-        setWeather("");
-        return;
-      }
-      console.log(res.data);
-      setCities(res.data);
-    });
-    setLoading(false);
-  };
-
-  const fetchCity = (selectedCity) => {
-    axios
-      .get(
-        `http://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&appid=6ecf2fe9632179c173dbff234cc83200`
-      )
-      .then((res) => {
-        setCities([]);
-        setWeather(res.data);
-        console.log(res.data);
-      });
-  };
-  // FETCHING END
+  // FETCH DATA - START
+  const { fetchData, fetchCity, error, weather, cities, loading } = useFetch();
   // ***********************
   // HANDLERS START
   const onKeyPress = (e) => {
@@ -71,10 +31,17 @@ const App = () => {
   cities.map((city) => testing.push(`${city.name},${city.country}`));
   const cleanup = Array.from(new Set(testing));
   // ***********************
+
+  console.log(weather === true);
   return (
     <div className={styles.app}>
       <div className={styles.input_div}>
-        <input type="text" name="weather" onKeyDown={onKeyPress} />
+        <input
+          type="text"
+          name="weather"
+          onKeyDown={onKeyPress}
+          spellCheck={true}
+        />
         {cleanup && (
           <div className={styles.cities_div}>
             {cleanup.map((city, i) => (
@@ -88,7 +55,7 @@ const App = () => {
             ))}
           </div>
         )}
-        <h3>{weather.name}</h3>
+        <h3>{weather && `${weather.name},${weather.sys.country}`}</h3>
       </div>
       {loading && <div className={styles["loading-spinner"]}></div>}
       {error && city.length > 0 && (

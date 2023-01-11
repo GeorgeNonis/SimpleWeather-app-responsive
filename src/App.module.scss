@@ -89,6 +89,11 @@
     grid-gap: 1rem;
     width: 80%;
     height: 60%;
+    transition: margin-bottom 100ms ease-out 100ms;
+  }
+
+  & div:hover {
+    margin-bottom: 20px;
   }
 
   @include screen(960px) {
