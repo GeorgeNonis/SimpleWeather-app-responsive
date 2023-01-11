@@ -16,7 +16,7 @@
     ".. input .."
     ".. main ..";
   grid-template-columns: 30px 1fr 30px;
-  grid-template-rows: 30px 1fr 1fr;
+  grid-template-rows: 30px 3fr 2fr;
   @include screen(960px) {
     grid-template-rows: 10px 2fr 6fr;
     h3 {
@@ -28,12 +28,13 @@
 .input_div {
   grid-area: input;
   padding-top: 3rem;
+  position: relative;
   input {
     width: 20rem;
     height: 2rem;
     border-radius: 10px;
     border: none;
-    background: #00000038;
+    background: #00000066;
     display: flex;
     margin: auto;
     padding: 1.5rem;
@@ -46,11 +47,14 @@
   }
   h3 {
     color: white;
-    font-size: 3rem;
+    font-size: 1.5rem;
     float: right;
     padding: 2rem;
     background: #0000004d;
     border-radius: 10px;
+    position: absolute;
+    right: 10px;
+    top: 170px;
   }
   @include screen(960px) {
     h3 {
@@ -71,7 +75,10 @@
   justify-items: center;
   align-items: center;
   text-align: center;
+  width: 80%;
+  justify-self: center;
   & h3 {
+    font-size: 1rem;
     color: white;
   }
   & div {
@@ -122,4 +129,22 @@
   animation: spinner 1.5s linear infinite;
   grid-area: main;
   justify-self: center;
+}
+
+.cities_div {
+  margin: auto;
+  width: 50%;
+  padding-block: 0.5rem;
+  margin-block: 0.5rem;
+  background: #00000066;
+  border-radius: 10px;
+  div {
+    text-align: center;
+    color: white;
+    padding: 0.5rem;
+    margin-block: 0.5rem;
+  }
+  div:hover {
+    background-color: #ffffffa8;
+  }
 }
