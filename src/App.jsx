@@ -5,7 +5,6 @@ import useFetch from "./hooks/useFetch";
 const App = () => {
   const [city, setCity] = useState("");
 
-  // FETCH DATA - START
   const { fetchData, fetchCity, error, weather, cities, loading } = useFetch();
   // ***********************
   // HANDLERS START
@@ -32,7 +31,22 @@ const App = () => {
   const cleanup = Array.from(new Set(testing));
   // ***********************
 
-  console.log(weather === true);
+  const validError = error && city.length > 0 && (
+    <h3 className={styles.error}>Cant find {city} in the database</h3>
+  );
+
+  const isLoading = loading && (
+    <div className={styles["loading-spinner"]}></div>
+  );
+  const citiesList = cleanup && (
+    <div className={styles.cities_div}>
+      {cleanup.map((city, i) => (
+        <div className={styles.cities} key={i} onClick={onSelectCityHandler}>
+          {city}
+        </div>
+      ))}
+    </div>
+  );
   return (
     <div className={styles.app}>
       <div className={styles.input_div}>
@@ -42,25 +56,11 @@ const App = () => {
           onKeyDown={onKeyPress}
           spellCheck={true}
         />
-        {cleanup && (
-          <div className={styles.cities_div}>
-            {cleanup.map((city, i) => (
-              <div
-                className={styles.cities}
-                key={i}
-                onClick={onSelectCityHandler}
-              >
-                {city}
-              </div>
-            ))}
-          </div>
-        )}
+        {citiesList}
         <h3>{weather && `${weather.name},${weather.sys.country}`}</h3>
       </div>
-      {loading && <div className={styles["loading-spinner"]}></div>}
-      {error && city.length > 0 && (
-        <h3 className={styles.error}>Cant find {city} in the database</h3>
-      )}
+      {isLoading}
+      {validError}
       {weather && !error && (
         <main className={styles.main_div}>
           <div>
