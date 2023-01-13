@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const useFetch = () => {
   const [weather, setWeather] = useState("");
@@ -8,7 +8,8 @@ const useFetch = () => {
   const [loading, setLoading] = useState(false);
 
   // Fetching cities with the same name from different countrys
-  const fetchData = (city) => {
+  const fetchData = useCallback((city) => {
+    console.log(city);
     setError(false);
     setLoading(true);
     const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=6ecf2fe9632179c173dbff234cc83200`;
@@ -23,16 +24,18 @@ const useFetch = () => {
       setCities(res.data);
     });
     setLoading(false);
-  };
+  }, []);
 
   // Fetching the chosen city from the list
-  const fetchCity = (selectedCity) => {
+  const fetchCity = useCallback((selectedCity) => {
+    console.log(selectedCity);
     axios
       .get(
         `http://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&appid=6ecf2fe9632179c173dbff234cc83200`
       )
       .then((res) => {
         setCities([]);
+        console.log(res.data);
         setWeather(res.data);
       })
       .catch((err) => {
@@ -47,7 +50,7 @@ const useFetch = () => {
             setWeather(res.data);
           });
       });
-  };
+  }, []);
   return {
     fetchData,
     fetchCity,

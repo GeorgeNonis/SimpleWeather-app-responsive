@@ -124,6 +124,11 @@
   color: white;
   font-size: 2rem;
   text-align: center;
+  h3 {
+    background: #00000066;
+    padding-block: 1rem;
+    border-radius: 10px;
+  }
 }
 
 @keyframes spinner {
