@@ -32,12 +32,10 @@ const App = () => {
 
   const onKeyPress = (e) => {
     if (e.key !== "Enter") return;
-    console.log(city);
     fetchCity(sortCityName(city));
   };
 
   const onChangeHandler = (e) => {
-    console.log(e.target.value);
     setCity(e.target.value);
   };
 

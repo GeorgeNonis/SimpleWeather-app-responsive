@@ -3,7 +3,7 @@ export const Error = ({ error, city, styles }) => {
     error &&
     city.length > 0 && (
       <div className={styles.error}>
-        <h3>Cant find {city} in the database</h3>
+        <h3>{error}</h3>
       </div>
     )
   );
