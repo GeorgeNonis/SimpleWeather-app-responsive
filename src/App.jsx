@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import styles from "./App.module.scss";
 import { Error } from "./components/error";
@@ -27,6 +28,21 @@ const App = () => {
   const { sendRequest, error, cities, loading, weather } = useLoading(getData);
 
   useDebounce(city, sendRequest);
+
+  // TESTING
+  axios
+    .get(
+      `http://api.openweathermap.org/data/2.5/weather?q=Ok,TM&appid=6ecf2fe9632179c173dbff234cc83200`
+    )
+    .then((res) => console.log(res.data));
+
+  axios
+    .get(
+      `http://api.openweathermap.org/geo/1.0/direct?q=Ok&limit=5&appid=6ecf2fe9632179c173dbff234cc83200`
+    )
+    .then((res) => console.log(res.data));
+
+  // TESTING
 
   const onKeyPress = (e) => {
     if (e.key !== "Enter") return;

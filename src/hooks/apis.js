@@ -12,13 +12,12 @@ export const getData = async (cities, boolean) => {
       if (res.data.length === 0) {
         throw new Error(!boolean && `No match found for ${cities}`);
       }
-      console.log(res.data);
       !boolean ? (data = [...res.data]) : (data = { ...res.data });
     })
     .catch((err) => {
       type = "ERROR";
-      data = !boolean ? err.message : err;
+      // data = !boolean ? err.message : err;
+      data = err.message;
     });
-  console.log("END OF AXIOS FUNCTION");
   return { type, data };
 };
