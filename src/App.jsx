@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./App.module.scss";
 import { Error } from "./components/error";
 import { IsLoading } from "./components/loading";
 import { Weather } from "./components/weather";
-import useFetch from "./hooks/useFetch";
+import { getData } from "./hooks/apis";
+import useDebounce from "./hooks/useDebounce";
+import useLoading from "./hooks/useLoading";
 
 const sortCityName = (arg) => {
   let split = arg.split(",");
@@ -15,24 +17,20 @@ const sortCityName = (arg) => {
     city = city.split(" ").join("&");
   }
   city = city.concat(",", country);
+
   return city;
 };
 
 const App = () => {
-  const { fetchData, fetchCity, error, weather, cities, loading } = useFetch();
   const [city, setCity] = useState("");
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      fetchData(city);
-    }, 500);
+  const { sendRequest, error, cities, loading, weather } = useLoading(getData);
 
-    return () => clearTimeout(timeout);
-  }, [city, fetchData]);
+  useDebounce(city, sendRequest);
 
   const onKeyPress = (e) => {
     if (e.key !== "Enter") return;
-    fetchCity(sortCityName(city));
+    sendRequest(sortCityName(city), true);
   };
 
   const onChangeHandler = (e) => {
@@ -40,7 +38,8 @@ const App = () => {
   };
 
   let testing = [];
-  cities.map((city) => testing.push(`${city.name},${city.country}`));
+  cities.length > 0 &&
+    cities.map((city) => testing.push(`${city.name},${city.country}`));
   const cleanup = Array.from(new Set(testing));
   // ***********************
 
@@ -63,8 +62,7 @@ const App = () => {
             ))}
           </datalist>
         )}
-        {/* <Cities obj={{ styles, onSelectCityHandler, cleanup }} /> */}
-        <h3>{weather && `${weather.name},${weather.sys.country}`}</h3>
+        <h3>{weather && !error && `${weather.name},${weather.sys.country}`}</h3>
       </div>
       <IsLoading loading={loading} styles={styles} />
       <Error error={error} styles={styles} city={city} />
